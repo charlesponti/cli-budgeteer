@@ -2,6 +2,7 @@
 var _ = require('lodash');
 var transactions = require('./transactions');
 var budget = require('./budget');
+var argv = require('yargs').argv;
 
 var transactionsByCategory = {};
 
@@ -12,11 +13,16 @@ var transactionsByCategory = {};
 var categories = _.unique(transactions.map(transaction => transaction.Category));
 
 categories.forEach(category => {
+  var total = 0;
   var categoryTransactions = transactions.filter(t => t.Category === category);
 
-  transactionsByCategory[category] = categoryTransactions.reduce((prev, curr, i, arr) => {
-    return prev + parseInt(arr[i]['Amount']);
+  categoryTransactions.forEach(t => {
+    total += parseFloat(t['Amount']);
   });
+
+  transactionsByCategory[category] = total.toFixed(2);
 });
 
-console.log(transactionsByCategory);
+_.keys(transactionsByCategory).forEach(k => {
+  console.log(`${k}: ${transactionsByCategory[k]}`);
+});
