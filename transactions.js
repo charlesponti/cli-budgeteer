@@ -14,7 +14,7 @@ module.exports = [
 {"Date":"18 Sep 2015","Description":"ZARA CANARY WARF UNIT 9 LONDON","Amount":39.99,"Category":"Clothing"},
 {"Date":"17 Sep 2015","Description":"CO-OP - CANARY WHARF CANARY WHARF","Amount":7.09,"Category":"Groceries"},
 {"Date":"17 Sep 2015","Description":"DOCKLANDS LIGHT RAILWAY LONDON","Amount":123.30,"Category":"Travel"},
-{"Date":"17 Sep 2015","Description":"SMART EVENT CATERING LT LONDON","Amount":10.00,"Category":"Business Services"},
+{"Date":"17 Sep 2015","Description":"Cosmopolitan Fashion Fest","Amount":10.00,"Category":"Alcohol"},
 {"Date":"16 Sep 2015","Description":"CINEWORLD CINEMAS ECOM LONDON","Amount":24.40,"Category":"Entertainment"},
 {"Date":"16 Sep 2015","Description":"TESCO SELF SERVICE LONDON","Amount":5.58,"Category":"Groceries"},
 {"Date":"16 Sep 2015","Description":"TESCO SELF SERVICE LONDON","Amount":1.64,"Category":"Groceries"},
