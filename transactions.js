@@ -1,6 +1,6 @@
 
-
 module.exports = [
+{"Date": "26 Sep 2015", "Description": "Staton Warriors Concert", "Amount": 33.56, "Category": "Entertainment"},
 {"Date": "24 Sep 2015", "Description": "Teds", "Amount": 38.50, "Category": "Utilities"},
 {"Date": "24 Sep 2015", "Description": "Tesco", "Amount": 7.97, "Category": "Food"},
 {"Date": "23 Sep 2015", "Description": "Tesco", "Amount": 10.30, "Category": "Food"},
