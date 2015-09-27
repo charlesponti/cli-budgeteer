@@ -21,14 +21,14 @@ categories.forEach(category => {
     total += parseFloat(t['Amount']);
   });
 
-  transactionsByCategory[category] = total.toFixed(2);
+  transactionsByCategory[category] = total;
 
   // Add to total spend
-  totalSpend = parseFloat(totalSpend) + parseFloat(total.toFixed(2));
+  totalSpend = parseFloat(totalSpend) + parseFloat(total);
 });
 
 _.keys(transactionsByCategory).forEach(k => {
-  console.log(`${k}: ${transactionsByCategory[k]}`);
+  console.log(`${k}: ${transactionsByCategory[k].toFixed(2)}`);
 });
 
-console.log(`Total Spend: ${totalSpend}`);
+console.log(`Total Spend: ${totalSpend.toFixed(2)}`);
