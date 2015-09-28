@@ -2,12 +2,12 @@
 var _ = require('lodash');
 var budget = require('./budget');
 var argv = require('yargs').argv;
-
-var transactionsByCategory = {};
-
+var Table = require('cli-table');
 var Converter = require("csvtojson").Converter;
 var converter = new Converter({});
+var transactionsByCategory = {};
 var transactions;
+var table;
 
 var promise = new Promise(function(resolve, reject) {
   //end_parsed will be emitted once parsing finished
@@ -27,6 +27,12 @@ promise.then(function(transactions) {
   var categories = _.unique(transactions.map(transaction => transaction.Category));
   var totalSpend = 0;
 
+  // instantiate
+  table = new Table({
+      head: ['Category', 'Amount', 'Percentage']
+    , colWidths: [25, 25, 25]
+  });
+
   categories.forEach(category => {
     var total = 0;
     var categoryTransactions = transactions.filter(t => t.Category === category);
@@ -42,8 +48,13 @@ promise.then(function(transactions) {
   });
 
   _.keys(transactionsByCategory).forEach(k => {
-    console.log(`${k}: ${transactionsByCategory[k].toFixed(2)}`);
+    var amount = transactionsByCategory[k]
+    var percentage = ((amount/totalSpend) * 100).toFixed(2);
+    table.push([k, amount.toFixed(2), percentage]);
+    // console.log(`${k}: ${amount.toFixed(2)}  ${percentage}%`);
   });
+
+  console.log(table.toString());
 
   console.log(`Total Spend: ${totalSpend.toFixed(2)}`);
 });
