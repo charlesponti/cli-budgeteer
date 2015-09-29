@@ -8,6 +8,11 @@ var converter = new Converter({});
 var transactionsByCategory = {};
 var transactions;
 var table;
+var file = argv.file;
+
+if (!file) {
+  return;
+}
 
 var promise = new Promise(function(resolve, reject) {
   //end_parsed will be emitted once parsing finished
@@ -17,7 +22,7 @@ var promise = new Promise(function(resolve, reject) {
 });
 
 //read from file
-require("fs").createReadStream("./september.csv").pipe(converter);
+require("fs").createReadStream(`./${file}`).pipe(converter);
 
 promise.then(function(transactions) {
   /**
