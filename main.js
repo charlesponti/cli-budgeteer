@@ -11,6 +11,8 @@ var table;
 var file = argv.file;
 
 if (!file) {
+  console.log('Please provide filename. Example: node main.js' +
+    ' --file=foo.csv');
   return;
 }
 
