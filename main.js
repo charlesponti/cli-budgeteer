@@ -44,7 +44,24 @@ promise.then(function(transactions) {
   table = new Table({
       head: ['Category', 'Amount', 'Percentage', 'Percentage of Income']
     , colWidths: [25, 25, 25, 25]
+// Create Budget
+if (argv.create) {
+  promise.then(function() {
+    var budgetTable = new Table({
+      head: ['Category', 'Percentage', 'Amount'],
+      colWidths: [25,25,25]
+    });
+
+    var selectedBudget = argv.create === 'one' ? budget.one : budget.basic;
+
+    _.keys(selectedBudget).forEach(function(key) {
+      var value = selectedBudget[key];
+      budgetTable.push([key, value.toFixed(2), (income * value).toFixed(2)])
+    });
+
+    console.log(budgetTable.toString());
   });
+}
 
   categories.forEach(category => {
     var total = 0;
