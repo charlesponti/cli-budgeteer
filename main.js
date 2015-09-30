@@ -1,7 +1,6 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var budget = require('./budget');
 var argv = require('yargs').argv;
 var Table = require('cli-table');
 var Converter = require('csvtojson').Converter;
@@ -9,10 +8,15 @@ var converter = new Converter({});
 var transactionsByCategory = {};
 var transactions;
 var table;
-var file = argv.file;
-var income = parseFloat(argv.salary);
 
-if (!file) {
+/**
+ * Budget catgories and percentages
+ * @type {object}
+ */
+var budget = require('./budget');
+
+// Exit process if no file provided
+if (!argv.file) {
   console.log('Please provide filename. Example: node main.js --file=foo.csv');
   process.exit();
 }
@@ -22,6 +26,19 @@ if (!argv.income) {
   console.log('Please provide monthly income. Example: node main.js --income=3000.00');
   process.exit();
 }
+
+/**
+ * Path to CSV file
+ * @type {string}
+ */
+var file = argv.file;
+
+/**
+ * Monthly income
+ * @type {Number}
+ */
+var income = parseFloat(argv.income);
+
 var promise = new Promise(function(resolve, reject) {
   //end_parsed will be emitted once parsing finished
   converter.on("end_parsed", function (jsonArray) {
