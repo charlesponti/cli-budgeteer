@@ -4,7 +4,7 @@ var fs = require('fs');
 var budget = require('./budget');
 var argv = require('yargs').argv;
 var Table = require('cli-table');
-var Converter = require("csvtojson").Converter;
+var Converter = require('csvtojson').Converter;
 var converter = new Converter({});
 var transactionsByCategory = {};
 var transactions;
