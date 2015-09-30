@@ -80,28 +80,44 @@ if (argv.create) {
   });
 }
 
-  categories.forEach(category => {
-    var total = 0;
-    var categoryTransactions = transactions.filter(t => t.Category === category);
+if (argv.budget) {
+  promise.then(function(transactions) {
+    /**
+     * Unique list of categories
+     * @type {Array}
+     */
+    var categories = _.unique(transactions.map(transaction => transaction.Category));
+    var totalSpend = 0;
 
-    categoryTransactions.forEach(t => {
-      total += parseFloat(t['Amount']);
+    // instantiate
+    table = new Table({
+      head: ['Category', 'Amount', 'Percentage', 'Percentage of Income'],
+      colWidths: [25, 25, 25, 25]
     });
 
-    transactionsByCategory[category] = total;
+    categories.forEach(category => {
+      var total = 0;
+      var categoryTransactions = transactions.filter(t => t.Category === category);
 
-    // Add to total spend
-    totalSpend = parseFloat(totalSpend) + parseFloat(total);
+      categoryTransactions.forEach(t => {
+        total += parseFloat(t['Amount']);
+      });
+
+      transactionsByCategory[category] = total;
+
+      // Add to total spend
+      totalSpend = parseFloat(totalSpend) + parseFloat(total);
+    });
+
+    _.keys(transactionsByCategory).forEach(k => {
+      var amount = transactionsByCategory[k];
+      var percentage = ((amount/totalSpend) * 100).toFixed(2);
+      var percentageOfIncome = ((amount/income) * 100).toFixed(2);
+      table.push([k, amount.toFixed(2), percentage, percentageOfIncome]);
+    });
+
+    console.log(table.toString());
+
+    console.log(`Total Spend: ${totalSpend.toFixed(2)}`);
   });
-
-  _.keys(transactionsByCategory).forEach(k => {
-    var amount = transactionsByCategory[k];
-    var percentage = ((amount/totalSpend) * 100).toFixed(2);
-    var percentageOfIncome = ((amount/income) * 100).toFixed(2);
-    table.push([k, amount.toFixed(2), percentage, percentageOfIncome]);
-  });
-
-  console.log(table.toString());
-
-  console.log(`Total Spend: ${totalSpend.toFixed(2)}`);
-});
+}
