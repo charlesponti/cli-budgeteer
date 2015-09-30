@@ -55,10 +55,9 @@ promise.then(function(transactions) {
   });
 
   _.keys(transactionsByCategory).forEach(k => {
-    var amount = transactionsByCategory[k]
+    var amount = transactionsByCategory[k];
     var percentage = ((amount/totalSpend) * 100).toFixed(2);
     table.push([k, amount.toFixed(2), percentage]);
-    // console.log(`${k}: ${amount.toFixed(2)}  ${percentage}%`);
   });
 
   console.log(table.toString());
