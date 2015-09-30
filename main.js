@@ -13,8 +13,7 @@ var file = argv.file;
 var income = parseFloat(argv.salary);
 
 if (!file) {
-  console.log('Please provide filename. Example: node main.js' +
-    ' --file=foo.csv');
+  console.log('Please provide filename. Example: node main.js --file=foo.csv');
   process.exit();
 }
 
