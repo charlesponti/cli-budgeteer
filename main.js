@@ -17,6 +17,11 @@ if (!file) {
   process.exit();
 }
 
+// Exit process if no income provided
+if (!argv.income) {
+  console.log('Please provide monthly income. Example: node main.js --income=3000.00');
+  process.exit();
+}
 var promise = new Promise(function(resolve, reject) {
   //end_parsed will be emitted once parsing finished
   converter.on("end_parsed", function (jsonArray) {
