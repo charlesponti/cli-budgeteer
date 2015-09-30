@@ -39,28 +39,16 @@ var file = argv.file;
  */
 var income = parseFloat(argv.income);
 
+// Promise to be resolved after CSV file is parsed
 var promise = new Promise(function(resolve, reject) {
-  //end_parsed will be emitted once parsing finished
   converter.on("end_parsed", function (jsonArray) {
     resolve(jsonArray);
   });
 });
 
-//read from file
+// Convert CSV file
 fs.createReadStream(`./${file}`).pipe(converter);
 
-promise.then(function(transactions) {
-  /**
-   * Unique list of categories
-   * @type {Array}
-   */
-  var categories = _.unique(transactions.map(transaction => transaction.Category));
-  var totalSpend = 0;
-
-  // instantiate
-  table = new Table({
-      head: ['Category', 'Amount', 'Percentage', 'Percentage of Income']
-    , colWidths: [25, 25, 25, 25]
 // Create Budget
 if (argv.create) {
   promise.then(function() {
