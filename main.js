@@ -15,12 +15,6 @@ var table;
  */
 var budget = require('./budget');
 
-// Exit process if no file provided
-if (!argv.file) {
-  console.log('Please provide filename. Example: node main.js --file=foo.csv');
-  process.exit();
-}
-
 // Exit process if no income provided
 if (!argv.income) {
   console.log('Please provide monthly income. Example: node main.js --income=3000.00');
@@ -28,47 +22,51 @@ if (!argv.income) {
 }
 
 /**
- * Path to CSV file
- * @type {string}
- */
-var file = argv.file;
-
-/**
  * Monthly income
  * @type {Number}
  */
 var income = parseFloat(argv.income);
 
-// Promise to be resolved after CSV file is parsed
-var promise = new Promise(function(resolve, reject) {
-  converter.on("end_parsed", function (jsonArray) {
-    resolve(jsonArray);
-  });
-});
-
-// Convert CSV file
-fs.createReadStream(`./${file}`).pipe(converter);
-
 // Create Budget
 if (argv.create) {
-  promise.then(function() {
-    var budgetTable = new Table({
-      head: ['Category', 'Percentage', 'Amount'],
-      colWidths: [25,25,25]
-    });
-
-    var selectedBudget = argv.create === 'one' ? budget.one : budget.basic;
-
-    _.keys(selectedBudget).forEach(function(key) {
-      var value = selectedBudget[key];
-      budgetTable.push([key, value.toFixed(2), (income * value).toFixed(2)])
-    });
-
-    console.log(budgetTable.toString());
+  var budgetTable = new Table({
+    head: ['Category', 'Percentage', 'Amount'],
+    colWidths: [25,25,25]
   });
+
+  var selectedBudget = argv.create === 'one' ? budget.one : budget.basic;
+
+  _.keys(selectedBudget).forEach(function(key) {
+    var value = selectedBudget[key];
+    budgetTable.push([key, value.toFixed(2), (income * value).toFixed(2)])
+  });
+
+  console.log(budgetTable.toString());
 }
 
 if (argv.budget) {
+  // Exit process if no file provided
+  if (!argv.file) {
+    console.log('Please provide filename. Example: node main.js --file=foo.csv');
+    process.exit();
+  }
+
+  /**
+   * Path to CSV file
+   * @type {string}
+   */
+  var file = argv.file;
+
+  // Promise to be resolved after CSV file is parsed
+  var promise = new Promise(function(resolve, reject) {
+    converter.on("end_parsed", function (jsonArray) {
+      resolve(jsonArray);
+    });
+  });
+
+  // Convert CSV file
+  fs.createReadStream(`./${file}`).pipe(converter);
+
   promise.then(function(transactions) {
     /**
      * Unique list of categories
