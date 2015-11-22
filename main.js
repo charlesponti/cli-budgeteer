@@ -1,66 +1,122 @@
 
 var _ = require('lodash');
-var budget = require('./budget');
+var fs = require('fs');
 var argv = require('yargs').argv;
 var Table = require('cli-table');
-var Converter = require("csvtojson").Converter;
+var Converter = require('csvtojson').Converter;
 var converter = new Converter({});
 var transactionsByCategory = {};
 var transactions;
 var table;
-var file = argv.file;
 
-if (!file) {
-  console.log('Please provide filename. Example: node main.js' +
-    ' --file=foo.csv');
-  return;
+/**
+ * Budget catgories and percentages
+ * @type {object}
+ */
+var budget = require('./budget');
+
+/**
+ * Monthly income
+ * @type {Number}
+ */
+var income = parseFloat(argv.income);
+
+// Create Budget
+if (argv.create) {
+  // Exit process if no income provided
+  if (!argv.income) {
+    console.log('Please provide monthly income. Example: node main.js --income=3000.00');
+    process.exit();
+  }
+
+  var budgetTable = new Table({
+    head: ['Category', 'Percentage', 'Amount'],
+    colWidths: [25,25,25]
+  });
+
+  var selectedBudget = argv.create === 'one' ? budget.one : budget.basic;
+
+  _.keys(selectedBudget).forEach(function(key) {
+    var value = selectedBudget[key];
+    budgetTable.push([key, value.toFixed(2), (income * value).toFixed(2)])
+  });
+
+  console.log(budgetTable.toString());
 }
 
-var promise = new Promise(function(resolve, reject) {
-  //end_parsed will be emitted once parsing finished
-  converter.on("end_parsed", function (jsonArray) {
-    resolve(jsonArray);
-  });
-});
+if (argv.budget) {
+  // Exit process if no file provided
+  if (!argv.file) {
+    console.log('Please provide filename. Example: node main.js --file=foo.csv');
+    process.exit();
+  }
 
-//read from file
-require("fs").createReadStream(`./${file}`).pipe(converter);
-
-promise.then(function(transactions) {
   /**
-   * Unique list of categories
-   * @type {Array}
+   * Path to CSV file
+   * @type {string}
    */
-  var categories = _.unique(transactions.map(transaction => transaction.Category));
-  var totalSpend = 0;
+  var file = argv.file;
 
-  // instantiate
-  table = new Table({
-      head: ['Category', 'Amount', 'Percentage']
-    , colWidths: [25, 25, 25]
+  // Promise to be resolved after CSV file is parsed
+  var promise = new Promise(function(resolve, reject) {
+    converter.on("end_parsed", function (jsonArray) {
+      resolve(jsonArray);
+    });
   });
 
-  categories.forEach(category => {
-    var total = 0;
-    var categoryTransactions = transactions.filter(t => t.Category === category);
+  // Convert CSV file
+  fs.createReadStream(`./${file}`).pipe(converter);
 
-    categoryTransactions.forEach(t => {
-      total += parseFloat(t['Amount']);
+  promise.then(function(transactions) {
+    /**
+     * Unique list of categories
+     * @type {Array}
+     */
+    var categories = _.unique(transactions.map(transaction => transaction.Category));
+    var totalSpend = 0;
+    var columns = ['Category', 'Amount', 'Percentage'];
+    var columnSizes = [25,25,25];
+
+    if (argv.income) {
+      columns.push('Percentage of Income');
+      columnSizes.push(25);
+    }
+
+    // instantiate
+    table = new Table({
+      head: columns,
+      colWidths: columnSizes
     });
 
-    transactionsByCategory[category] = total;
+    categories.forEach(category => {
+      var total = 0;
+      var categoryTransactions = transactions.filter(t => t.Category === category);
 
-    // Add to total spend
-    totalSpend = parseFloat(totalSpend) + parseFloat(total);
+      categoryTransactions.forEach(t => {
+        total += parseFloat(t.Amount);
+      });
+
+      transactionsByCategory[category] = total;
+
+      // Add to total spend
+      totalSpend = parseFloat(totalSpend) + parseFloat(total);
+    });
+
+    _.keys(transactionsByCategory).forEach(k => {
+      var amount = transactionsByCategory[k];
+      var percentage = ((amount/totalSpend) * 100).toFixed(2);
+
+      if (argv.income) {
+        var percentageOfIncome = ((amount/totalSpend) * 100).toFixed(2);
+        table.push([k, amount.toFixed(2), percentage, percentageOfIncome]);
+      }
+      else {
+        table.push([k, amount.toFixed(2), percentage]);
+      }
+    });
+
+    console.log(table.toString());
+
+    console.log(`Total Spend: ${totalSpend.toFixed(2)}`);
   });
-
-  _.keys(transactionsByCategory).forEach(k => {
-    var amount = transactionsByCategory[k]
-    var percentage = ((amount/totalSpend) * 100).toFixed(2);
-    table.push([k, amount.toFixed(2), percentage]);
-  });
-
-  console.log(table.toString());
-
-  console.log(`Total Spend: ${totalSpend.toFixed(2)}`);
-});
+}
