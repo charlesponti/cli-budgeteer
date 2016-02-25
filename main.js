@@ -23,25 +23,7 @@ var income = parseFloat(argv.income);
 
 // Create Budget
 if (argv.create) {
-  // Exit process if no income provided
-  if (!argv.income) {
-    console.log('Please provide monthly income. Example: node main.js --income=3000.00');
-    process.exit();
-  }
-
-  var budgetTable = new Table({
-    head: ['Category', 'Percentage', 'Amount'],
-    colWidths: [25,25,25]
-  });
-
-  var selectedBudget = argv.create === 'one' ? budget.one : budget.basic;
-
-  _.keys(selectedBudget).forEach(function(key) {
-    var value = selectedBudget[key];
-    budgetTable.push([key, value.toFixed(2), (income * value).toFixed(2)])
-  });
-
-  console.log(budgetTable.toString());
+  create()
 }
 
 if (argv.budget) {
