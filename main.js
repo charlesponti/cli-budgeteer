@@ -45,9 +45,10 @@ if (argv.budget) {
     const categories = _.unique(
       transactions.map((transaction) => transaction.Category)
     )
-    var totalSpend = 0
-    var columns = ['Category', 'Amount', 'Percentage']
-    var columnSizes = [25, 25, 25]
+    let totalSpend = 0
+    let balance = 0
+    var columns = ['Category', 'Amount', 'Count', 'Percentage']
+    var columnSizes = [25, 25, 25, 25]
 
     if (argv.income) {
       columns.push('Percentage of Income')
@@ -62,15 +63,19 @@ if (argv.budget) {
 
     categories.forEach((category) => {
       let total = 0
+      let count = 0
+
       var categoryTransactions = (
         transactions.filter((t) => t.Category === category)
       )
 
       categoryTransactions.forEach((t) => {
         total += parseFloat(t.Amount)
+        count += 1
       })
 
       transactionsByCategory[category] = total
+      countByCategory[category] = count
 
       // Add to total spend
       totalSpend = parseFloat(totalSpend) + parseFloat(total)
@@ -79,12 +84,23 @@ if (argv.budget) {
     _.keys(transactionsByCategory).forEach((k) => {
       var amount = transactionsByCategory[k]
       var percentage = ((amount / totalSpend) * 100).toFixed(2)
+      let count = countByCategory[k]
 
       if (argv.income) {
-        var percentageOfIncome = ((amount / totalSpend) * 100).toFixed(2)
-        table.push([k, amount.toFixed(2), percentage, percentageOfIncome])
+        table.push([
+          k,
+          amount.toFixed(2),
+          count,
+          percentage.toFixed(2),
+          percentageOfIncome.toFixed(2)
+        ])
       } else {
-        table.push([k, amount.toFixed(2), percentage])
+        table.push([
+          k,
+          amount.toFixed(2),
+          count,
+          percentage.toFixed(2)
+        ])
       }
     })
 
