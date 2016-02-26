@@ -1,11 +1,9 @@
 import {argv} from 'yargs'
-var _ = require('lodash')
-var fs = require('fs')
-var Table = require('cli-table')
-var Converter = require('csvtojson').Converter
-var converter = new Converter({})
-var transactionsByCategory = {}
-var table
+import {Converter} from 'csvtojson'
+import Table from 'cli-table'
+import fs from 'fs'
+import path from 'path'
+import _ from 'lodash'
 import create from './create'
 
 // Create Budget
