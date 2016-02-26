@@ -22,7 +22,7 @@ if (argv.budget) {
    * Path to CSV file
    * @type {string}
    */
-  var file = argv.file
+  const filePath = path.resolve(__dirname, argv.file + '.csv')
 
   // Promise to be resolved after CSV file is parsed
   var promise = new Promise((resolve, reject) => {
