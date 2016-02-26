@@ -1,4 +1,3 @@
-
 module.exports = {
   basic: {
     'Housing': 0.30,
@@ -15,4 +14,4 @@ module.exports = {
     Flexible: 0.30,
     Goals: 0.20
   }
-};
+}
