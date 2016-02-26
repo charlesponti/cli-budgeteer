@@ -28,6 +28,11 @@ if (argv.budget) {
   var promise = new Promise((resolve, reject) => {
     converter.on('end_parsed', (jsonArray) => resolve(jsonArray))
   })
+  // Exit process if no file found by the name supplied
+  if (!fs.existsSync(filePath)) {
+    console.log('File ' + filePath + ' not found.')
+    process.exit()
+  }
 
   // Convert CSV file
   fs.createReadStream(`./${file}`).pipe(converter)
