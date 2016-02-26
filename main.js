@@ -12,6 +12,11 @@ if (argv.create) {
 }
 
 if (argv.budget) {
+  const converter = new Converter({})
+  const transactionsByCategory = {}
+  const countByCategory = {}
+  let table
+
   // Exit process if no file provided
   if (!argv.file) {
     console.log('Please provide filename. Example: node main.js --file=foo.csv')
@@ -24,20 +29,18 @@ if (argv.budget) {
    */
   const filePath = path.resolve(__dirname, argv.file + '.csv')
 
-  // Promise to be resolved after CSV file is parsed
-  var promise = new Promise((resolve, reject) => {
-    converter.on('end_parsed', (jsonArray) => resolve(jsonArray))
-  })
   // Exit process if no file found by the name supplied
   if (!fs.existsSync(filePath)) {
     console.log('File ' + filePath + ' not found.')
     process.exit()
   }
 
-  // Convert CSV file
-  fs.createReadStream(`./${file}`).pipe(converter)
+  converter.fromFile(filePath, (err, transactions) => {
+    if (err) {
+      console.log(err)
+      process.exit()
+    }
 
-  promise.then((transactions) => {
     /**
      * Unique list of categories
      * @type {Array}
@@ -70,21 +73,31 @@ if (argv.budget) {
       )
 
       categoryTransactions.forEach((t) => {
-        total += parseFloat(t.Amount)
+        total += parseFloat(t.Amount.replace('£', ''))
         count += 1
       })
 
       transactionsByCategory[category] = total
       countByCategory[category] = count
 
-      // Add to total spend
-      totalSpend = parseFloat(totalSpend) + parseFloat(total)
+      // Do not add payments to total spend
+      if (parseFloat(total) > 0) {
+        // Add to total spend
+        totalSpend += total
+      }
+
+      balance += total
     })
+
+    let percentageTotal = 0
 
     _.keys(transactionsByCategory).forEach((k) => {
       var amount = transactionsByCategory[k]
-      var percentage = ((amount / totalSpend) * 100).toFixed(2)
       let count = countByCategory[k]
+      var percentage = ((amount / totalSpend) * 100)
+      var percentageOfIncome = ((amount / parseFloat(argv.income)) * 100)
+
+      percentageTotal += percentageOfIncome
 
       if (argv.income) {
         table.push([
@@ -107,5 +120,7 @@ if (argv.budget) {
     console.log(table.toString())
 
     console.log(`Total Spend: ${totalSpend.toFixed(2)}`)
+    console.log(`Balance: ${balance.toFixed(2)}`)
+    console.log(percentageTotal)
   })
 }
