@@ -14,8 +14,17 @@ if (!fs.existsSync(filePath)) {
   process.exit()
 }
 
+app.use(express.static(__dirname + '/client'))
+app.set('views', __dirname + '/client')
+app.engine('html', require('ejs').renderFile)
+app.set('view engine', 'ejs')
+
 app.use('/api', (req, res, next) => {
   converter.fromFile(filePath, (err, transactions) => res.json(transactions))
+})
+
+app.use('*', (req, res, next) => {
+  res.render('index.html')
 })
 
 app.listen(3000)
