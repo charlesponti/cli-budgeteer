@@ -26,10 +26,13 @@ $.get('/api', (data) => {
 
   var accounts = Object.keys(window.accounts)
 
+  var netWorth = 0
+
   accounts.forEach((account) => {
     accountName = account + ''
     account = window.accounts[account]
     account.balance = (account.credit - account.debit).toFixed(2)
+    netWorth += parseFloat(account.balance)
 
     var accountEl = $(`
       <div class="col-md-4">
@@ -40,6 +43,8 @@ $.get('/api', (data) => {
 
     $('.container .row').append(accountEl)
   })
+
+  $('#net-worth').text('Net Worth: ' + netWorth.toFixed(2))
 
   console.log(window.accounts)
 })
