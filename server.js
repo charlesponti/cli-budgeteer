@@ -23,8 +23,6 @@ app.use('/api', (req, res, next) => {
   converter.fromFile(filePath, (err, transactions) => res.json(transactions))
 })
 
-app.use('*', (req, res, next) => {
-  res.render('index.html')
-})
+app.use('*', (req, res, next) => res.render('index.html'))
 
 app.listen(3000)
