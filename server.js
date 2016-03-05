@@ -3,6 +3,7 @@ import path from 'path'
 import express from 'express'
 import {Converter} from 'csvtojson'
 import {argv} from 'yargs'
+let TRANSACTIONS
 
 const app = express()
 const converter = new Converter({})
@@ -20,9 +21,14 @@ app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'ejs')
 
 app.use('/api', (req, res, next) => {
-  converter.fromFile(filePath, (err, transactions) => res.json(transactions))
+  res.json(TRANSACTIONS)
 })
 
 app.use('*', (req, res, next) => res.render('index.html'))
 
-app.listen(3000)
+converter.fromFile(filePath, (err, transactions) => {
+  TRANSACTIONS = transactions
+
+  app.listen(3000)
+})
+
