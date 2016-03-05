@@ -29,12 +29,12 @@ $.get('/api', (data) => {
   accounts.forEach((account) => {
     accountName = account + ''
     account = window.accounts[account]
-    account.total = (account.credit - account.debit).toFixed(2)
+    account.balance = (account.credit - account.debit).toFixed(2)
 
     var accountEl = $(`
       <div class="col-md-4">
           <h2>${accountName}</h2>
-          <h3>Total: ${account.total}</h3>
+          <h3>Balance: ${account.balance}</h3>
        </div>
     `)
 
