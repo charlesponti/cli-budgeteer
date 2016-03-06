@@ -28,8 +28,12 @@ $.get('/api', (data) => {
 
   var netWorth = 0
 
+  function moneyFormat(number) {
+    return numeral(number).format('0,0.00')
+  }
+
   accounts.forEach((account) => {
-    accountName = account + ''
+    var accountName = account + ''
     account = window.accounts[account]
     account.balance = (account.credit - account.debit).toFixed(2)
     netWorth += parseFloat(account.balance)
@@ -37,14 +41,14 @@ $.get('/api', (data) => {
     var accountEl = $(`
       <div class="col-md-4">
           <h2>${accountName}</h2>
-          <h3>Balance: ${account.balance}</h3>
+          <h3>Balance: £ ${moneyFormat(account.balance)}</h3>
        </div>
     `)
 
     $('.container .row').append(accountEl)
   })
 
-  $('#net-worth').text('Net Worth: ' + netWorth.toFixed(2))
+  $('#net-worth').text('Net Worth: £ ' + moneyFormat(netWorth.toFixed(2)))
 
   console.log(window.accounts)
 })
