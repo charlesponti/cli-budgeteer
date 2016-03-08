@@ -1,11 +1,12 @@
-
 $.get('/api', (data) => {
   window.accounts = {}
+  var i = 0
 
   data.forEach((transaction) => {
     var account = transaction.Account
     var debit = transaction['Debit Amount']
     var credit = transaction['Credit Amount']
+    var db = new PouchDB(account)
 
     if (Object.keys(window.accounts).indexOf(account) === -1) {
       window.accounts[account] = {credit: 0, debit: 0, transactions: []}
@@ -19,9 +20,15 @@ $.get('/api', (data) => {
       window.accounts[account].credit += credit
     }
 
+    transaction._id = i
+
+    i++
+
     transaction.date = new Date(transaction.Date)
 
     window.accounts[account].transactions.push(transaction)
+
+    db.put(transaction)
   })
 
   var accounts = Object.keys(window.accounts)
