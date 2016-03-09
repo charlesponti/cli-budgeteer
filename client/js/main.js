@@ -27,9 +27,13 @@ $.get('/api', (data) => {
 
   data.forEach((transaction) => {
     var account = transaction.Account
+    var date = transaction['Date']
     var debit = transaction['Debit Amount']
     var credit = transaction['Credit Amount']
     var db = new PouchDB(account)
+    if (getDays().indexOf(date) === -1) {
+      window.days[date] = { netWorth: 0, transactions: [] }
+    }
 
     if (Object.keys(window.accounts).indexOf(account) === -1) {
     if (getAccounts().indexOf(account) === -1) {
@@ -38,10 +42,12 @@ $.get('/api', (data) => {
 
     if (typeof transaction['Debit Amount'] === 'number') {
       window.accounts[account].debit += debit
+      window.days[date].netWorth -= debit
     }
 
     if (typeof transaction['Credit Amount'] === 'number') {
       window.accounts[account].credit += credit
+      window.days[date].netWorth += credit
     }
 
     transaction._id = i
