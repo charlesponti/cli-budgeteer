@@ -20,6 +20,7 @@ function Day (data = {}) {
 $.get('/api', (data) => {
   window.accounts = {}
   var i = 0
+  var getAccounts = () => Object.keys(window.accounts)
 
   data.forEach((transaction) => {
     var account = transaction.Account
@@ -28,6 +29,7 @@ $.get('/api', (data) => {
     var db = new PouchDB(account)
 
     if (Object.keys(window.accounts).indexOf(account) === -1) {
+    if (getAccounts().indexOf(account) === -1) {
       window.accounts[account] = {credit: 0, debit: 0, transactions: []}
     }
 
