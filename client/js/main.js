@@ -22,6 +22,9 @@ $.get('/api', (data) => {
   var i = 0
   var getAccounts = () => Object.keys(window.accounts)
 
+  // Ensure that transactions are sorted by date
+  data = _.sortBy(data, (d) => d.Date)
+
   data.forEach((transaction) => {
     var account = transaction.Account
     var debit = transaction['Debit Amount']
