@@ -4,24 +4,22 @@ function Account () {
   this.transactions = []
 }
 
-//function Transaction (data = {}) {
-//  this.amount = data['Debit'] || data['Credit']
-//  this.date = new Date(data.Date)
-//  this.account = data['Account']
-//  this.category = data['Category']
-//}
-//
-//function Day (data = {}) {
-//  this.date = data['Day']
-//  this.netWorth = 0
-//  this.transactions = []
-//}
+function Transaction (data = {}) {
+  this.amount = data['Debit'] || data['Credit']
+  this.date = new Date(data.Date)
+  this.account = data['Account']
+  this.category = data['Category']
+}
+
+function Day (data = {}) {
+  this.date = data['Day']
+  this.netWorth = 0
+  this.transactions = []
+}
 
 $.get('/api', (data) => {
   window.accounts = {}
-  window.days = {}
   var i = 0
-  var getDays = () => Object.keys(window.days)
   var getAccounts = () => Object.keys(window.accounts)
 
   // Ensure that transactions are sorted by date
@@ -30,14 +28,12 @@ $.get('/api', (data) => {
   data.forEach((transaction) => {
     var account = transaction.Account
     var date = transaction['Date']
-    var debit = transaction['Debit']
-    var credit = transaction['Credit']
+    var debit = transaction['Debit Amount']
+    var credit = transaction['Credit Amount']
     //var db = new PouchDB(account)
 
     if (getDays().indexOf(date) === -1) {
-      var previousDay = window.days[getDays()[getDays().length - 1]]
-      var previousNetWorth = previousDay ? previousDay.netWorth : 0
-      window.days[date] = { netWorth: previousNetWorth, transactions: [] }
+      window.days[date] = { netWorth: 0, transactions: [] }
     }
 
     if (getAccounts().indexOf(account) === -1) {
@@ -47,7 +43,9 @@ $.get('/api', (data) => {
     if (typeof debit === 'number') {
       window.accounts[account].debit += debit
       window.days[date].netWorth -= debit
-    } else if (typeof credit === 'number') {
+    }
+
+    if (typeof transaction['Credit Amount'] === 'number') {
       window.accounts[account].credit += credit
       window.days[date].netWorth += credit
     }
@@ -60,14 +58,14 @@ $.get('/api', (data) => {
 
     window.accounts[account].transactions.push(transaction)
 
-    //db.put(transaction)
+    db.put(transaction)
   })
 
   var accounts = Object.keys(window.accounts)
 
   var netWorth = 0
 
-  function moneyFormat (number) {
+  function moneyFormat(number) {
     return numeral(number).format('0,0.00')
   }
 
@@ -88,23 +86,6 @@ $.get('/api', (data) => {
   })
 
   $('#net-worth').text('Net Worth: £ ' + moneyFormat(netWorth.toFixed(2)))
-  $('#net-worth-over-time').highcharts({
-    chart: {
-      type: 'line'
-    },
-
-    title: {
-      text: 'Net Worth Over Time'
-    },
-
-    data: {
-      columns: [
-        getDays(),
-        getDays(window.days).map((day) => window.days[day].netWorth)
-      ]
-    }
-  })
 
   console.log(window.accounts)
-  console.log(window.days)
 })
