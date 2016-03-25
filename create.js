@@ -51,6 +51,5 @@ module.exports = function () {
     })
   }
 
-
   console.log(budgetTable.toString())
 }
