@@ -1,22 +1,3 @@
-function Account () {
-  this.credit = 0
-  this.debit = 0
-  this.transactions = []
-}
-
-function Transaction (data = {}) {
-  this.amount = data['Debit'] || data['Credit']
-  this.date = new Date(data.Date)
-  this.account = data['Account']
-  this.category = data['Category']
-}
-
-function Day (data = {}) {
-  this.date = data['Day']
-  this.netWorth = 0
-  this.transactions = []
-}
-
 $.get('/api', (data) => {
   window.accounts = {}
   var i = 0
