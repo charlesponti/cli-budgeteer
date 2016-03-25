@@ -6,7 +6,7 @@ import _ from 'lodash'
  * Budget catgories and percentages
  * @type {object}
  */
-import budget from './budget'
+import {categories} from './budget'
 
 module.exports = function () {
   // Exit process if no income provided
@@ -22,18 +22,17 @@ module.exports = function () {
   const income = parseFloat(argv.income)
 
   var budgetTable = new Table({
-    head: ['Category', 'Percentage', 'Amount'],
-    colWidths: [25, 25, 25]
+    head: ['Category', 'Percentage', 'Yearly', 'Monthly'],
+    colWidths: [25, 25, 25, 25]
   })
 
-  var selectedBudget = argv.create === 'one' ? budget.one : budget.basic
-
-  _.keys(selectedBudget).forEach((key) => {
-    const value = selectedBudget[key]
+  _.keys(categories).forEach((key) => {
+    const value = categories[key].amount
     budgetTable.push([
       key,
       (value * 100) + '%',
-      (income * value).toFixed(2)
+      (income * value).toFixed(2),
+      ((income * value) / 12).toFixed(2)
     ])
   })
 
