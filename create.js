@@ -9,9 +9,12 @@ import _ from 'lodash'
 import {categories} from './budget'
 
 module.exports = function () {
+  const monthly = isNaN(parseFloat(argv.monthly)) ? undefined : parseFloat(argv.monthly)
+  const yearly = isNaN(parseFloat(argv.yearly)) ? undefined : parseFloat(argv.yearly)
+
   // Exit process if no income provided
-  if (argv.montly || argv.yearly) {
-    console.log('Please provide monthly income. Example: node main.js --income=3000.00')
+  if (monthly === undefined && yearly === undefined) {
+    console.log('Please provide income. Example: node main.js --monthly=3000.00')
     process.exit()
   }
 
@@ -19,10 +22,7 @@ module.exports = function () {
    * Monthly income
    * @type {Number}
    */
-  let income
-
-  if (!isNaN(parseFloat(argv.monthly))) income = parseFloat(argv.monthly)
-  else if (!isNaN(parseFloat(argv.yearly))) income = parseFloat(argv.yearly)
+  const income = monthly || yearly
 
   var budgetTable = new Table({
     head: ['Category', 'Percentage', 'Yearly', 'Monthly'],
