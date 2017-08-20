@@ -11,7 +11,6 @@ $.get('/api', (data) => {
     var date = transaction['Date']
     var debit = transaction['Debit Amount']
     var credit = transaction['Credit Amount']
-    //var db = new PouchDB(account)
 
     if (getDays().indexOf(date) === -1) {
       window.days[date] = { netWorth: 0, transactions: [] }
