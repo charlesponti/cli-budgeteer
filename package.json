@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "jasmine './src/**/*.test.js'",
-    "test:specs": "chokidar -p './src/**/*.test.js' -c 'npm run test'",
+    "test:specs": "chokidar -p './src/**/*.js' -c 'npm run test'",
     "budget": "./node_modules/.bin/babel-node ./src/main.js --budget",
     "create": "./node_modules/.bin/babel-node ./src/main.js --create",
     "start": "./node_modules/.bin/babel-node ./src/server.js"
@@ -81,6 +81,9 @@
     "webpack": "^3.5.2"
   },
   "eslintConfig": {
+    "env": {
+      "jasmine": true
+    },
     "extends": [
       "eslint:recommended",
       "standard"
