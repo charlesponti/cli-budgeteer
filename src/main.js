@@ -45,9 +45,8 @@ if (argv.budget) {
      * Unique list of categories
      * @type {Array}
      */
-    const categories = _.unique(
-      transactions.map((transaction) => transaction.Category)
-    )
+    const categories = {}
+    const accounts = {}
     let totalSpend = 0
     let balance = 0
     var columns = ['Category', 'Amount', 'Count', 'Percentage']
@@ -64,6 +63,17 @@ if (argv.budget) {
       colWidths: columnSizes
     })
 
+    for (var i = 0; i < transactions.length; i++) {
+      if (categories[transactions[i].Category] === void 0) {
+        categories[transactions[i].Category] = {
+          total: parseFloat(transactions[i].Amount),
+          transactions: [transactions[i]]
+        }
+      } else {
+        categories[transactions[i].Category].transactions.push([transactions[i]])
+        categories[transactions[i].Category].amount += parseFloat(transactions[i].Amount)
+      }
+    }
     categories.forEach((category) => {
       let total = 0
       let count = 0
@@ -73,7 +83,7 @@ if (argv.budget) {
       )
 
       categoryTransactions.forEach((t) => {
-        total += parseFloat(t.Amount.replace('£', ''))
+        total += parseFloat(t.Amount)
         count += 1
       })
 
@@ -117,10 +127,9 @@ if (argv.budget) {
       }
     })
 
-    console.log(table.toString())
-
-    console.log(`Total Spend: ${totalSpend.toFixed(2)}`)
-    console.log(`Balance: ${balance.toFixed(2)}`)
-    console.log(percentageTotal)
+    process.stdout.write(table.toString())
+    process.stdout.write(`Total Spend: ${totalSpend.toFixed(2)}`)
+    process.stdout.write(`Balance: ${balance.toFixed(2)}`)
+    process.stdout.write(percentageTotal)
   })
 }
