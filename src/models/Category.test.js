@@ -37,4 +37,21 @@ describe('Category', function () {
     })
   })
 
+  describe('.removeTransaction', function () {
+    it('should remove transaction from .transactions', function () {
+      var transaction = { payee: 'Foo', amount: 5, id: 'abz' }
+      category.addTransaction(transaction)
+      expect(category.transactions[transaction.id]).toEqual(transaction)
+      category.removeTransaction(transaction)
+      expect(category.transactions[transaction.id]).toEqual(void 0)
+    })
+    it('should remove transaction.amount from .total', function () {
+      var transaction = { payee: 'Foo', amount: -5.32, id: 'abz' }
+      category.addTransaction(transaction)
+      category.addTransaction(Object.assign({ id: 'abc' }, transaction))
+      expect(category.total).toEqual(-10.64)
+      category.removeTransaction(transaction)
+      expect(category.total).toEqual(-5.32)
+    })
+  })
 })

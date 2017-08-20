@@ -9,28 +9,41 @@ function Category (name) {
 }
 
 /**
+ * Get transaction from category
  * 
- * 
- * @param {any} id
+ * @param {String} id
  * @returns {Transaction}
  */
-Category.prototype.getTransaction = function (id) {
+function getTransaction (id) {
   return this.transactions[id]
 }
 
 /**
- * 
+ * Add transaction to category
  * 
  * @param {Transaction} transaction
  * @returns {undefined}
  */
-Category.prototype.addTransaction = function (transaction) {
+function addTransaction (transaction) {
   this.transactions[transaction.id] = transaction
   this.total += transaction.amount
 }
 
-Category.prototype.removeTransaction = function () {
+/**
+ * Remove transaction from category
+ * 
+ * @param {{ id: String, amount: Number }} Transaction to remove from category
+ */
+function removeTransaction ({ id, amount }) {
+  // Remove transaction from category
+  delete this.transactions[id]
 
+  // Adjust total
+  this.total -= amount
 }
+
+Category.prototype.getTransaction = getTransaction
+Category.prototype.addTransaction = addTransaction
+Category.prototype.removeTransaction = removeTransaction
 
 module.exports = Category
