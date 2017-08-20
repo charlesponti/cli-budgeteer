@@ -2,7 +2,7 @@
 function Category (name) {
   this.total = 0
   this.name = name
-  this.transactions = []
+  this.transactions = {}
 }
 
 Category.prototype.addTransaction = function () {
