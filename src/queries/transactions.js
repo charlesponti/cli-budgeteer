@@ -1,11 +1,13 @@
 const { GraphQLList } = require('graphql')
+
+const data = require('../data')
 const { TransactionType } = require('../types')
 
 module.exports = {
   type: new GraphQLList(TransactionType),
-  description: 'Retrieve a transaction',
+  description: 'Transactions from csv',
   args: { },
   resolve () {
-    return [{ amount: 15.00, payee: 'Meerkat Manor' }]
+    return data.getTransactions()
   }
 }
