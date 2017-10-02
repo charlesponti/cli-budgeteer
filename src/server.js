@@ -1,8 +1,8 @@
-import fs from 'fs'
-import path from 'path'
-import express from 'express'
-import {Converter} from 'csvtojson'
-import {argv} from 'yargs'
+const fs = require('fs')
+const path = require('path')
+const express = require('express')
+const { Converter } = require('csvtojson')
+const { argv } = require('yargs')
 
 let TRANSACTIONS
 
