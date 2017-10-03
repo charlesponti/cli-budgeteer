@@ -3,9 +3,8 @@ const express = require('express')
 const winston = require('winston')
 const GraphQLHTTP = require('express-graphql')
 const schema = require('./schemas')
-
 const app = express()
-const clientPath = path.resolve(__dirname, './client')
+const clientPath = path.resolve(__dirname, '../client')
 
 app.use(express.static(clientPath))
 app.set('views', clientPath)
