@@ -13,6 +13,7 @@ app.set('view engine', 'ejs')
 
 app.use('/graphiql', GraphQLHTTP({
   schema,
+  pretty: true,
   graphiql: true
 }))
 
