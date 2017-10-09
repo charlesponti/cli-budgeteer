@@ -1,46 +1,24 @@
-const fs = require('fs')
 const path = require('path')
 const express = require('express')
-const { Converter } = require('csvtojson')
-const { argv } = require('yargs')
-
-let TRANSACTIONS
-
+const winston = require('winston')
+const GraphQLHTTP = require('express-graphql')
+const schema = require('./schemas')
 const app = express()
-const converter = new Converter({})
-const filePath = path.resolve(__dirname, argv.file + '.csv')
-const clientPath = path.resolve(__dirname, './client')
-
-// Exit process if no file found by the name supplied
-if (!fs.existsSync(filePath)) {
-  process.stdout.write('File ' + filePath + ' not found.')
-  process.exit()
-}
+const clientPath = path.resolve(__dirname, '../client')
 
 app.use(express.static(clientPath))
 app.set('views', clientPath)
 app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'ejs')
 
-app.use('/api', (req, res, next) => {
-  res.json(TRANSACTIONS)
-})
+app.use('/graphiql', GraphQLHTTP({
+  schema,
+  pretty: true,
+  graphiql: true
+}))
 
 app.use('*', (req, res, next) => res.render('index.html'))
 
-/**
- * Load CSV file before starting application so that the data
- * is ready
- */
-converter.fromFile(filePath, (err, transactions) => {
-  if (err) {
-    // Write error to console
-    process.stdout.write(err)
-  }
-
-  // Set value of TRANSACTIONS in outer scope
-  TRANSACTIONS = transactions
-
-  // Start application
-  app.listen(3000)
+app.listen(3000, function () {
+  winston.info('GraphQL Server running @ port 3000')
 })
