@@ -1,10 +1,17 @@
+/* eslint no-console: 0 */
 import {argv} from 'yargs'
 import {Converter} from 'csvtojson'
 import Table from 'cli-table'
 import fs from 'fs'
 import path from 'path'
 import _ from 'lodash'
+import winston from 'winston'
 import create from './create'
+
+if (!argv.create && !argv.budget) {
+  winston.info(`You must provide either --create to create a budget or --budget to view your budget`)
+  process.exit()
+}
 
 // Create Budget
 if (argv.create) {
@@ -46,7 +53,6 @@ if (argv.budget) {
      * @type {Array}
      */
     const categories = {}
-    const accounts = {}
     let totalSpend = 0
     let balance = 0
     var columns = ['Category', 'Amount', 'Count', 'Percentage']
@@ -74,7 +80,8 @@ if (argv.budget) {
         categories[transactions[i].Category].amount += parseFloat(transactions[i].Amount)
       }
     }
-    categories.forEach((category) => {
+
+    Object.keys(categories).sort().forEach((category) => {
       let total = 0
       let count = 0
 
@@ -127,9 +134,9 @@ if (argv.budget) {
       }
     })
 
-    process.stdout.write(table.toString())
-    process.stdout.write(`Total Spend: ${totalSpend.toFixed(2)}`)
-    process.stdout.write(`Balance: ${balance.toFixed(2)}`)
-    process.stdout.write(percentageTotal)
+    console.log(table.toString())
+    console.log(`Total Spend: ${totalSpend.toFixed(2)}`)
+    console.log(`Balance: ${balance.toFixed(2)}`)
+    console.log(`${percentageTotal}`)
   })
 }
