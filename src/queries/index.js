@@ -1,7 +1,7 @@
 const { GraphQLObjectType } = require('graphql')
 const transactions = require('./transactions')
 const summary = require('./summary')
-const category = require('./category')
+const categories = require('./categories')
 
 module.exports = new GraphQLObjectType({
   name: 'Query',
@@ -10,5 +10,6 @@ module.exports = new GraphQLObjectType({
     transactions,
     summary,
     category
+    categories
   })
 })
