@@ -82,7 +82,6 @@ converter.fromFile(filePath, (err, transactions) => {
     }
   }, baseState)
 
-  console.log(Summary.balance)
 })
 
 module.exports = {
