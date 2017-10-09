@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { Converter } = require('csvtojson')
+const { addIfDoesntExist, addToTotal } = require('./utils')
 
 /**
  * @namespace transaction
@@ -46,28 +47,11 @@ converter.fromFile(filePath, (err, transactions) => {
     Date: new Date(t.Date)
   })
 
-  /**
-   * Add a value to an array if it does not exist yet
-   * @param {array} currentValues
-   * @param {any} newValue
-   * @returns {array}
-   */
-  const addIfDoesntExist = (currentValues, newValue) => (
-    currentValues.indexOf(newValue) === -1 ? [...currentValues, newValue].sort() : currentValues
-  )
-
   const baseState = {
     accounts: [],
     categories: [],
     balance: 0,
     transactions: []
-  }
-
-  function addToTotal (a, b) {
-    const round = b => Math.round(b * 100) / 100
-    if (typeof b === 'string') return round(a + parseFloat(b.replace(',', '')))
-    else if (typeof b === 'number') return round(a + b)
-    return round(a)
   }
 
   // Set value of TRANSACTIONS in outer scope and convert items to TransactionType
@@ -81,7 +65,6 @@ converter.fromFile(filePath, (err, transactions) => {
       transactions: a.transactions.concat(t)
     }
   }, baseState)
-
 })
 
 module.exports = {
