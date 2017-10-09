@@ -1,6 +1,8 @@
 module.exports = {
   addIfDoesntExist,
-  addToTotal
+  addToTotal,
+  addTransactionToObject,
+  objectToArrayWithName
 }
 
 /**
@@ -10,9 +12,11 @@ module.exports = {
  * @returns {array}
  */
 function addIfDoesntExist (currentValues, newValue) {
-  return (
-    currentValues.indexOf(newValue) === -1 ? [...currentValues, newValue].sort() : currentValues
-  )
+  if (typeof currentValues === 'object' && currentValues.constructor === Object) {
+    return { ...currentValues, ...newValue }
+  } else if (Array.isArray(currentValues)) {
+    return currentValues.indexOf(newValue) === -1 ? [...currentValues, newValue].sort() : currentValues
+  }
 }
 
 /**
@@ -30,4 +34,18 @@ function addToTotal (a, b) {
   if (typeof b === 'string') return round(a + parseFloat(b.replace(',', '')))
   else if (typeof b === 'number') return round(a + b)
   return round(a)
+}
+
+function objectToArrayWithName (o) {
+  return Object.keys(o).sort().map(a => ({ name: a, ...o[a] }))
+}
+
+function addTransactionToObject (object, key, transaction) {
+  const r = object[key]
+  if (r) {
+    r.balance = addToTotal(r.balance, transaction.Amount)
+    r.transactions.push(r)
+  } else {
+    object[key] = { balance: transaction.Amount, transactions: [transaction] }
+  }
 }

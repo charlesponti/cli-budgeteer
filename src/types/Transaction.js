@@ -1,8 +1,8 @@
 const { GraphQLObjectType, GraphQLFloat, GraphQLString } = require('graphql')
 
 module.exports = new GraphQLObjectType({
-  name: 'csvTransaction',
-  description: 'Transaction from csv',
+  name: 'Transaction',
+  description: 'Transaction',
   fields: () => ({
     Account: { type: GraphQLString },
     Transfers: { type: GraphQLString },
