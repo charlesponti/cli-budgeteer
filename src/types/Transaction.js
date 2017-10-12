@@ -4,12 +4,9 @@ module.exports = new GraphQLObjectType({
   name: 'Transaction',
   description: 'Transaction',
   fields: () => ({
-    Account: { type: GraphQLString },
-    Transfers: { type: GraphQLString },
-    Description: { type: GraphQLString },
-    Payee: { type: GraphQLString },
-    Category: { type: GraphQLString },
-    Date: { type: GraphQLString },
-    Amount: { type: GraphQLFloat }
+    payee: { type: GraphQLString, resolve: p => p.payee },
+    description: { type: GraphQLString, resolve: p => p.description },
+    date: { type: GraphQLString, resolve: p => p.date },
+    amount: { type: GraphQLFloat, resolve: p => p.amount }
   })
 })

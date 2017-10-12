@@ -42,9 +42,10 @@ function objectToArrayWithName (o) {
 
 function addTransactionToObject (object, key, transaction) {
   const r = object[key]
+
   if (r) {
     r.balance = addToTotal(r.balance, transaction.Amount)
-    r.transactions.push(r)
+    r.transactions.push(transaction)
   } else {
     object[key] = { balance: transaction.Amount, transactions: [transaction] }
   }

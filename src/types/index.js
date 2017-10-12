@@ -1,12 +1,16 @@
 const { GraphQLObjectType, GraphQLList, GraphQLFloat, GraphQLString } = require('graphql')
 const TransactionType = require('./Transaction')
+const { Transaction } = require('../data')
 
 const AccountType = new GraphQLObjectType({
   name: 'Account',
   fields: () => ({
-    name: { type: GraphQLString },
+    name: { type: GraphQLString, resolve: a => a.name },
     balance: { type: GraphQLFloat },
-    transactions: { type: new GraphQLList(TransactionType) }
+    transactions: {
+      type: new GraphQLList(TransactionType),
+      resolve: (root) => Transaction.findAll({ where: { accountId: root.id } })
+    }
   })
 })
 
