@@ -81,14 +81,17 @@ converter.fromFile(filePath, (err, transactions) => {
       const promises = []
 
       data.forEach(function (account) {
-        accounts.find(a => a.name === account.name).transactions.map(t => promises.push((
-          account.createTransaction({
-            payee: t.Payee,
-            amount: t.Amount,
-            description: t.Description,
-            date: t.Date
-          })
-        )))
+        accounts
+          .find(a => a.name === account.name)
+          .transactions
+          .map(t => promises.push((
+            account.createTransaction({
+              payee: t.Payee,
+              amount: t.Amount,
+              description: t.Description,
+              date: t.Date
+            })
+          )))
       })
 
       return Promise.all(promises)
