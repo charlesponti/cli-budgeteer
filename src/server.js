@@ -19,6 +19,10 @@ app.use('/graphiql', GraphQLHTTP({
 
 app.use('*', (req, res, next) => res.render('index.html'))
 
-app.listen(3000, function () {
-  winston.info('GraphQL Server running @ port 3000')
-})
+if (require.main === module) {
+  app.listen(3000, function () {
+    winston.info('GraphQL Server running @ port 3000')
+  })
+}
+
+module.exports = app
