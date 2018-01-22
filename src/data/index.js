@@ -30,25 +30,25 @@ const Tag = Conn.define('tag', {
   name: { type: Sequelize.STRING, allowNull: false }
 })
 
-const PersonModel = Conn.define('person', {
-  firstName: { type: Sequelize.STRING, allowNull: false },
-  lastName: { type: Sequelize.STRING, allowNull: false },
-  email: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: { isEmail: true }
-  }
-})
+// const PersonModel = Conn.define('person', {
+//   firstName: { type: Sequelize.STRING, allowNull: false },
+//   lastName: { type: Sequelize.STRING, allowNull: false },
+//   email: {
+//     type: Sequelize.STRING,
+//     allowNull: false,
+//     validate: { isEmail: true }
+//   }
+// })
 
 // Relationships
-PersonModel.hasMany(Account)
-PersonModel.hasMany(Transaction)
+// PersonModel.hasMany(Account)
+// PersonModel.hasMany(Transaction)
 
 Account.hasMany(Transaction)
 
 Transaction.hasMany(Category)
 Transaction.hasMany(Tag)
-Transaction.belongsTo(PersonModel)
+// Transaction.belongsTo(PersonModel)
 Transaction.belongsTo(Account)
 
 module.exports = {
