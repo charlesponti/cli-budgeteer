@@ -4,7 +4,9 @@ This is a tool which creates a GraphQL API and command-line interface for intera
 one's financial history in the form of transactions.
 
 ## Transactions
+
 Transactions are in the form of:
+
 <style>
   table tr td:first-child {
     font-weight: 600
@@ -50,6 +52,7 @@ Transactions are in the form of:
 </table>
 
 ## To Do
+
 - [x] GraphQL API
 - [ ] Responsive Images
 - [ ] Responsive Images of maps
