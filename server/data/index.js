@@ -2,6 +2,7 @@ require('dotenv').config()
 const Sequelize = require('sequelize')
 const { DB, DB_LOGIN, DB_PASSWORD, DB_HOST, DB_DIALECT } = process.env
 const { eq } = Sequelize.Op
+const { FLOAT, STRING } = Sequelize;
 
 const Conn = new Sequelize(DB, DB_LOGIN, DB_PASSWORD, {
   dialect: DB_DIALECT,
@@ -10,31 +11,31 @@ const Conn = new Sequelize(DB, DB_LOGIN, DB_PASSWORD, {
 })
 
 const Account = Conn.define('account', {
-  name: { type: Sequelize.STRING, allowNull: false },
-  balance: { type: Sequelize.FLOAT }
+  name: { type: STRING, allowNull: false },
+  balance: { type: FLOAT }
 })
 
 const Category = Conn.define('category', {
-  name: { type: Sequelize.STRING, allowNull: false },
-  balance: { type: Sequelize.FLOAT, allowNull: false }
+  name: { type: STRING, allowNull: false },
+  balance: { type: FLOAT, allowNull: false }
 })
 
 const Transaction = Conn.define('transaction', {
-  amount: { type: Sequelize.FLOAT, allowNull: false },
+  amount: { type: FLOAT, allowNull: false },
   date: { type: Sequelize.DATE, allowNull: false },
-  payee: { type: Sequelize.STRING, allowNull: false },
-  description: { type: Sequelize.STRING }
+  payee: { type: STRING, allowNull: false },
+  description: { type: STRING }
 })
 
 const Tag = Conn.define('tag', {
-  name: { type: Sequelize.STRING, allowNull: false }
+  name: { type: STRING, allowNull: false }
 })
 
 // const PersonModel = Conn.define('person', {
-//   firstName: { type: Sequelize.STRING, allowNull: false },
-//   lastName: { type: Sequelize.STRING, allowNull: false },
+//   firstName: { type: STRING, allowNull: false },
+//   lastName: { type: STRING, allowNull: false },
 //   email: {
-//     type: Sequelize.STRING,
+//     type: STRING,
 //     allowNull: false,
 //     validate: { isEmail: true }
 //   }
