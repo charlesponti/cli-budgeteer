@@ -1,38 +1,48 @@
-const sequelize = require('sequelize')
-const { eq, lte, gte, iLike } = sequelize.Op
-const { GraphQLList, GraphQLString } = require('graphql')
-const { TransactionType } = require('../types')
-const { Transaction, Account } = require('../data')
+const sequelize = require("sequelize");
+const { eq, lte, gte, iLike } = sequelize.Op;
+const { GraphQLList, GraphQLString } = require("graphql");
+const { TransactionType } = require("../types");
+const { Transaction, Account } = require("../data");
 
 module.exports = {
   type: new GraphQLList(TransactionType),
-  description: 'Transactions',
+  description: "Transactions",
   args: {
-    account: { type: GraphQLString, description: 'Account which transaction occured on' },
-    from: { type: GraphQLString, description: 'Minimum date' },
-    to: { type: GraphQLString, description: 'Maximum date' }
+    account: {
+      type: GraphQLString,
+      description: "Account which transaction occured on"
+    },
+    from: { type: GraphQLString, description: "Minimum date" },
+    to: { type: GraphQLString, description: "Maximum date" }
   },
-  resolve (root, args) {
-    const baseQuery = { where: { }, order: sequelize.col('date') }
+  resolve(root, args) {
+    const baseQuery = { where: {}, order: sequelize.col("date") };
 
     if (args.from) {
-      baseQuery.where.date = { [gte]: args.from }
+      baseQuery.where.date = { [gte]: args.from };
     }
 
     if (args.to) {
       if (baseQuery.where.date) {
-        Object.assign(baseQuery.where.date, { [lte]: args.to })
+        Object.assign(baseQuery.where.date, { [lte]: args.to });
       } else {
-        baseQuery.where.date = { [lte]: args.to }
+        baseQuery.where.date = { [lte]: args.to };
       }
     }
 
     if (args.account) {
-      return Account.find({ where: { name: { [iLike]: `%${args.account}%` } } }).then(a => {
-        return Transaction.findAll({ ...baseQuery, where: { accountId: { [eq]: a.id }, ...baseQuery.where } })
-      })
+      return Account.find({
+        where: { name: { [iLike]: `%${args.account}%` } }
+      }).then(a => {
+        return Transaction.findAll({
+          ...baseQuery,
+          where: { accountId: { [eq]: a.id }, ...baseQuery.where }
+        });
+      });
     } else {
-      return Transaction.findAll(baseQuery)
+      return (
+        Transaction.findAll({ baseQuery, include: [Account] })
+      );
     }
   }
-}
+};

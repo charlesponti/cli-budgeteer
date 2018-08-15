@@ -1,5 +1,11 @@
-*.csv
-.idea
-node_modules
 .DS_Store
+.idea/
+.sonarlint/
+.vscode/
+
+node_modules
+
+# application-specific
 secrets/
+*.csv
+*.sqlite

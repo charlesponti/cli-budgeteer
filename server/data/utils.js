@@ -3,7 +3,7 @@ module.exports = {
   addToTotal,
   addTransactionToObject,
   objectToArrayWithName
-}
+};
 
 /**
  * Add a value to an array if it does not exist yet
@@ -11,11 +11,16 @@ module.exports = {
  * @param {any} newValue
  * @returns {array}
  */
-function addIfDoesntExist (currentValues, newValue) {
-  if (typeof currentValues === 'object' && currentValues.constructor === Object) {
-    return { ...currentValues, ...newValue }
+function addIfDoesntExist(currentValues, newValue) {
+  if (
+    typeof currentValues === "object" &&
+    currentValues.constructor === Object
+  ) {
+    return { ...currentValues, ...newValue };
   } else if (Array.isArray(currentValues)) {
-    return currentValues.indexOf(newValue) === -1 ? [...currentValues, newValue].sort() : currentValues
+    return currentValues.indexOf(newValue) === -1
+      ? [...currentValues, newValue].sort()
+      : currentValues;
   }
 }
 
@@ -28,25 +33,27 @@ function addIfDoesntExist (currentValues, newValue) {
  * @param {string|number} b
  * @returns {number}
  */
-function addToTotal (a, b) {
+function addToTotal(a, b) {
   // Round to the nearest second decimal space
-  const round = b => Math.round(b * 100) / 100
-  if (typeof b === 'string') return round(a + parseFloat(b.replace(',', '')))
-  else if (typeof b === 'number') return round(a + b)
-  return round(a)
+  const round = b => Math.round(b * 100) / 100;
+  if (typeof b === "string") return round(a + parseFloat(b.replace(",", "")));
+  else if (typeof b === "number") return round(a + b);
+  return round(a);
 }
 
-function objectToArrayWithName (o) {
-  return Object.keys(o).sort().map(a => ({ name: a, ...o[a] }))
+function objectToArrayWithName(o) {
+  return Object.keys(o)
+    .sort()
+    .map(a => ({ name: a, ...o[a] }));
 }
 
-function addTransactionToObject (object, key, transaction) {
-  const r = object[key]
+function addTransactionToObject(object, key, transaction) {
+  const r = object[key];
 
   if (r) {
-    r.balance = addToTotal(r.balance, transaction.Amount)
-    r.transactions.push(transaction)
+    r.balance = addToTotal(r.balance, transaction.Amount);
+    r.transactions.push(transaction);
   } else {
-    object[key] = { balance: transaction.Amount, transactions: [transaction] }
+    object[key] = { balance: transaction.Amount, transactions: [transaction] };
   }
 }

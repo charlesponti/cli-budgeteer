@@ -1,9 +1,0 @@
-type Transaction {
-  id: ID!
-  account: String!
-  transferAccount: ID
-  description: String
-  category: String!
-  date: String!
-  amount: Int!
-}

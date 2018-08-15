@@ -11,6 +11,6 @@
  * @param {number} fixedCosts
  * @return {number}
  */
-module.exports = function getFlexBudget (monthlyIncome, fixedCosts) {
-  return (monthlyIncome - fixedCosts) / 4.3
-}
+module.exports = function getFlexBudget(monthlyIncome, fixedCosts) {
+  return (monthlyIncome - fixedCosts) / 4.3;
+};

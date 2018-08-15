@@ -1,18 +1,22 @@
 /* eslint no-console: 0 */
 
-const { Conn, Account } = require('./index')
+const { Conn, Account } = require("./index");
 
-const fs = require('fs')
-const path = require('path')
-const { Converter } = require('csvtojson')
-const { addToTotal, addTransactionToObject, objectToArrayWithName } = require('./utils')
+const fs = require("fs");
+const path = require("path");
+const { Converter } = require("csvtojson/v1");
+const {
+  addToTotal,
+  addTransactionToObject,
+  objectToArrayWithName
+} = require("./utils");
 
-const filePath = path.resolve(__dirname, './transactions.csv')
+const filePath = path.resolve(__dirname, "./transactions.csv");
 
 // Exit process if no file found by the name supplied
 if (!fs.existsSync(filePath)) {
-  process.stdout.write('File ' + filePath + ' not found.')
-  process.exit()
+  process.stdout.write("File " + filePath + " not found.");
+  process.exit();
 }
 
 /**
@@ -20,15 +24,15 @@ if (!fs.existsSync(filePath)) {
  * @property {number} balance
  * @property {array} transactions
  */
-const ACCOUNTS = {}
+const ACCOUNTS = {};
 
-const CATEGORIES = {}
+const CATEGORIES = {};
 
-const TRANSACTIONS = []
+const TRANSACTIONS = [];
 
-let NET_WORTH = 0
+let NET_WORTH = 0;
 
-const converter = new Converter({})
+const converter = new Converter({});
 
 /**
  * Load CSV file before starting application so that the data is ready
@@ -36,25 +40,27 @@ const converter = new Converter({})
 converter.fromFile(filePath, (err, transactions) => {
   if (err) {
     // Write error to console
-    process.stdout.write(err)
+    process.stdout.write(err);
   }
 
   const convertToTransactionType = t => ({
     ...t,
-    Date: new Date(t.Date)
-  })
+    Amount: Number(t.Amount),
+    Date: new Date(t.Date),
+    Processed: new Date(t.Processed)
+  });
 
   // Set value of TRANSACTIONS in outer scope and convert items to TransactionType
-  transactions.forEach(function (t) {
-    t = convertToTransactionType(t)
+  transactions.forEach(function(t) {
+    t = convertToTransactionType(t);
 
-    addTransactionToObject(ACCOUNTS, t.Account, t)
+    addTransactionToObject(ACCOUNTS, t.Account, t);
 
-    addTransactionToObject(CATEGORIES, t.Category, t)
+    addTransactionToObject(CATEGORIES, t.Category, t);
 
-    TRANSACTIONS.push(t)
+    TRANSACTIONS.push(t);
 
-    NET_WORTH = addToTotal(NET_WORTH, t.Amount)
+    NET_WORTH = addToTotal(NET_WORTH, t.Amount);
     /**
      * When a transaction gets added...
      * 1. Adjust account.balance
@@ -64,46 +70,46 @@ converter.fromFile(filePath, (err, transactions) => {
      * 5. Adjust net worth
      * 6. Add transaction to master transaction list
      */
-  })
+  });
 
-  const accounts = objectToArrayWithName(ACCOUNTS)
+  const accounts = objectToArrayWithName(ACCOUNTS);
 
-  Conn
-    .sync({ force: true })
-    .then(function () {
-      return Promise.all(accounts.map(a => (
-        Account.create({ name: a.name, balance: a.balance })
-      )))
-    })
-    .then(function (data) {
-      console.log()
-      console.log('Accounts saved to database.')
-      const promises = []
+  Conn.sync({ force: true })
+    .then(() =>
+      Promise.all(
+        accounts.map(a => Account.create({ name: a.name, balance: a.balance }))
+      )
+    )
+    .then(function(data) {
+      console.log();
+      console.log("Accounts saved to database.");
+      const promises = [];
 
-      data.forEach(function (account) {
-        accounts
-          .find(a => a.name === account.name)
-          .transactions
-          .map(t => promises.push((
-            account.createTransaction({
-              payee: t.Payee,
-              amount: t.Amount,
-              description: t.Description,
-              date: t.Date
-            })
-          )))
-      })
+      data.forEach(function(account) {
+        accounts.find(a => a.name === account.name).transactions.map(t =>
+          promises.push(
+            account.createTransaction(
+              Object
+                .keys(t)
+                .reduce(
+                  (result, key) => ({ ...result, [key.toLowerCase()]: t[key] }),
+                  {}
+                )
+            )
+          )
+        );
+      });
 
-      return Promise.all(promises)
+      return Promise.all(promises);
     })
-    .then(function (data) {
-      console.log()
-      console.log(`${data.length} transactions added!`)
-      process.exit()
+    .then(function(data) {
+      console.log();
+      console.log(`${data.length} transactions added!`);
+      process.exit();
     })
-    .catch(function (err) {
-      console.log()
-      console.log(`Error: ${JSON.stringify(err, null, 2)}`)
-      process.exit()
-    })
-})
+    .catch(function(err) {
+      console.log();
+      console.log(`Error: ${JSON.stringify(err, null, 2)}`);
+      process.exit();
+    });
+});
