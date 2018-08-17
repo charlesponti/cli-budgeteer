@@ -1,0 +1,7 @@
+{
+  "name": "budgeteer",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^3.0.6"
+  }
+}

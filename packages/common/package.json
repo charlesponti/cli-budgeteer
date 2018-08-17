@@ -1,0 +1,10 @@
+{
+  "name": "@budgeteer/common",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "typings": "index.d.ts"
+}
