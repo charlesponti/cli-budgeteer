@@ -1,14 +1,14 @@
 {
   "name": "@budgeteer/cli",
   "description": "A personal finance analysis tool for the command line",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "author": "charlesponti @charlesponti",
   "bin": {
     "budgeteer-cli": "./bin/run"
   },
   "bugs": "https://github.com/charlesponti/budgeteer-cli/issues",
   "dependencies": {
-    "@budgeteer/common": "*",
+    "@budgeteer/common": "^0.1.0",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
