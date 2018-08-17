@@ -16,7 +16,11 @@ module.exports = {
     to: { type: GraphQLString, description: "Maximum date" }
   },
   resolve(root, args) {
-    const baseQuery = { where: {}, order: sequelize.col("date") };
+    const baseQuery = {
+      where: {},
+      order: sequelize.col("date"),
+      include: [Account]
+    };
 
     if (args.from) {
       baseQuery.where.date = { [gte]: args.from };
@@ -33,16 +37,14 @@ module.exports = {
     if (args.account) {
       return Account.find({
         where: { name: { [iLike]: `%${args.account}%` } }
-      }).then(a => {
-        return Transaction.findAll({
+      }).then(a =>
+        Transaction.findAll({
           ...baseQuery,
-          where: { accountId: { [eq]: a.id }, ...baseQuery.where }
-        });
-      });
-    } else {
-      return (
-        Transaction.findAll({ baseQuery, include: [Account] })
+          where: { account_id: { [eq]: a.id }, ...baseQuery.where }
+        })
       );
     }
+
+    return Transaction.findAll({ baseQuery });
   }
 };

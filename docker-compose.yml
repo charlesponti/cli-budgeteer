@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  web:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    secrets:
+      - postgres_password
+
+  db:
+    image: postgres:latest
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password

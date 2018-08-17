@@ -1,22 +1,20 @@
-require("dotenv").config();
 const Sequelize = require("sequelize");
-const {
-  DB,
-  DB_LOGIN,
-  DB_PASSWORD,
-  DB_HOST,
-  DB_STORAGE,
-  DB_DIALECT
-} = process.env;
+const { DB, DB_LOGIN, DB_PASSWORD, DB_HOST, DB_PORT } = process.env;
 const { eq } = Sequelize.Op;
 const { FLOAT, STRING, BOOLEAN } = Sequelize;
 
-const Conn = new Sequelize(DB, DB_LOGIN, DB_PASSWORD, {
-  dialect: DB_DIALECT,
-  host: DB_HOST,
-  operatorsAliases: { $eq: eq },
-  storage: DB_STORAGE
-});
+const Conn = new Sequelize(
+  DB ? DB : "budgeteer",
+  DB_LOGIN ? DB_LOGIN : "admin",
+  DB_PASSWORD ? DB_PASSWORD : "",
+  {
+    dialect: "postgres",
+    host: DB_HOST ? DB_HOST : "localhost",
+    port: DB_PORT ? DB_PORT : "5432",
+    operatorsAliases: { $eq: eq },
+    logging: false
+  }
+);
 
 const Account = Conn.define("account", {
   name: { type: STRING, allowNull: false },

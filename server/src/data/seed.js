@@ -86,18 +86,18 @@ converter.fromFile(filePath, (err, transactions) => {
       const promises = [];
 
       data.forEach(function(account) {
-        accounts.find(a => a.name === account.name).transactions.map(t =>
-          promises.push(
-            account.createTransaction(
-              Object
-                .keys(t)
-                .reduce(
+        accounts
+          .find(a => a.name === account.name)
+          .transactions.map(t =>
+            promises.push(
+              account.createTransaction(
+                Object.keys(t).reduce(
                   (result, key) => ({ ...result, [key.toLowerCase()]: t[key] }),
                   {}
                 )
+              )
             )
-          )
-        );
+          );
       });
 
       return Promise.all(promises);

@@ -5,4 +5,6 @@
 const { Conn } = require("./index");
 
 // Sync models
-Conn.sync();
+Conn.sync().then(function() {
+  process.exit(0);
+});

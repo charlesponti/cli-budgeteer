@@ -1,7 +1,16 @@
+# system_files
 .DS_Store
 .idea/
 .sonarlint/
 .vscode/
+*-debug.log
+*-error.log
+
+/.nyc_output
+/dist
+/lib
+/package-lock.json
+/tmp
 
 node_modules
 
@@ -9,3 +18,4 @@ node_modules
 secrets/
 *.csv
 *.sqlite
+postgres-data/
