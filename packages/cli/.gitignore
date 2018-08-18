@@ -1,0 +1,21 @@
+# system_files
+.DS_Store
+.idea/
+.sonarlint/
+.vscode/
+*-debug.log
+*-error.log
+
+/.nyc_output
+/dist
+/lib
+/package-lock.json
+/tmp
+
+node_modules
+
+# application-specific
+secrets/
+*.csv
+*.sqlite
+postgres-data/

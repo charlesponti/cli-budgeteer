@@ -1,0 +1,11 @@
+{
+  "name": "@budgeteer/common",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "typings": "index.d.ts",
+  "gitHead": "f692a8b0ad47b62901c8e6d44b6cd9239038442c"
+}
