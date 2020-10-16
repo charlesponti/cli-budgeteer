@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "csvtojson": "^2.0.8",
+    "dotenv": "^8.2.0",
     "express": "^4.13.4",
     "express-graphql": "^0.6.11",
     "graphql": "^0.11.6",
@@ -36,6 +37,7 @@
     "eslint-plugin-prettier": "^2.6.2",
     "husky": "^0.14.3",
     "prettier": "^1.14.2",
-    "pretty-quick": "^1.6.0"
+    "pretty-quick": "^1.6.0",
+    "sequelize-cli": "^6.2.0"
   }
 }
