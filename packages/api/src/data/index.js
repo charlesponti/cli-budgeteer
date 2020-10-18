@@ -1,4 +1,5 @@
 const Sequelize = require("sequelize");
+const logger = require("../logger");
 const { DB, DB_LOGIN, DB_PASSWORD, DB_HOST, DB_PORT } = process.env;
 const { eq } = Sequelize.Op;
 const { FLOAT, STRING, BOOLEAN } = Sequelize;
@@ -8,7 +9,7 @@ const Conn = new Sequelize(DB, DB_LOGIN, DB_PASSWORD, {
   host: DB_HOST,
   port: DB_PORT ? DB_PORT : "5432",
   operatorsAliases: { $eq: eq },
-  logging: false
+  logging: msg => logger.log("info", msg)
 });
 
 const Account = Conn.define("account", {
@@ -24,7 +25,7 @@ const Category = Conn.define("category", {
 const Transaction = Conn.define("transaction", {
   amount: { type: FLOAT, allowNull: false },
   date: { type: Sequelize.DATE, allowNull: false },
-  processed: { type: Sequelize.DATE, allowNull: false },
+  processed: { type: Sequelize.DATE, allowNull: true },
   payee: { type: STRING, allowNull: false },
   description: { type: STRING },
   category: { type: STRING },
