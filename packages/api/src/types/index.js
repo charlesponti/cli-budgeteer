@@ -1,4 +1,3 @@
-const sequelize = require("sequelize");
 const {
   GraphQLObjectType,
   GraphQLList,
@@ -6,23 +5,6 @@ const {
   GraphQLString
 } = require("graphql");
 const TransactionType = require("./Transaction");
-const { Transaction } = require("../data");
-
-const AccountType = new GraphQLObjectType({
-  name: "Account",
-  fields: () => ({
-    name: { type: GraphQLString, resolve: a => a.name },
-    balance: { type: GraphQLFloat },
-    transactions: {
-      type: new GraphQLList(TransactionType),
-      resolve: root =>
-        Transaction.findAll({
-          where: { accountId: root.id },
-          order: sequelize.col("date")
-        })
-    }
-  })
-});
 
 const CategoryType = new GraphQLObjectType({
   name: "Category",
@@ -47,7 +29,6 @@ const SummaryType = new GraphQLObjectType({
 
 module.exports = {
   TransactionType,
-  AccountType,
   CategoryType,
   SummaryType
 };

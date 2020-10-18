@@ -1,11 +1,13 @@
 const express = require("express");
-const winston = require("winston");
+
 const GraphQLHTTP = require("express-graphql");
 const app = express();
 
 const { GraphQLSchema } = require("graphql");
-const query = require("./queries");
+
+const logger = require("./logger");
 const mutation = require("./mutations");
+const query = require("./queries");
 
 app.use(
   "*",
@@ -21,7 +23,9 @@ app.use(
 
 if (require.main === module) {
   app.listen(3000, function() {
-    winston.info("GraphQL Server running @ port 3000");
+    logger.info(
+      `${process.env.NODE_ENV.toUpperCase()} GraphQL Server running @ port 3000`
+    );
   });
 }
 
