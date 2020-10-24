@@ -1,4 +1,4 @@
-FROM node:carbon-alpine
+FROM node:slim
 
 WORKDIR /usr/app
 
@@ -11,6 +11,8 @@ COPY . .
 
 ARG NODE_ENV
 ENV NODE_ENV ${NODE_ENV}
+
+RUN npm run db:sync
 
 CMD ["npm", "start"]
 

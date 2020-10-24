@@ -1,14 +1,12 @@
 const Sequelize = require("sequelize");
 const logger = require("../logger");
 const { DB, DB_LOGIN, DB_PASSWORD, DB_HOST, DB_PORT } = process.env;
-const { eq } = Sequelize.Op;
 const { FLOAT, STRING, BOOLEAN } = Sequelize;
 
 const Conn = new Sequelize(DB, DB_LOGIN, DB_PASSWORD, {
   dialect: "postgres",
   host: DB_HOST,
   port: DB_PORT ? DB_PORT : "5432",
-  operatorsAliases: { $eq: eq },
   logging: msg => logger.log("info", msg)
 });
 

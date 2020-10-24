@@ -5,7 +5,7 @@ const {
   GraphQLObjectType,
   GraphQLInt
 } = require("graphql");
-const data = require("../data");
+const { Transaction } = require("../data");
 
 const RestaurantsResponse = new GraphQLObjectType({
   name: "restaurantsResponse",
@@ -18,14 +18,12 @@ const RestaurantsResponse = new GraphQLObjectType({
 module.exports = {
   type: RestaurantsResponse,
   args: {},
-  resolve(root, args) {
-    const items = uniq(
-      data
-        .getTransactions()
-        .filter(t => t.Category === "Food > Dining Out")
-        .map(t => t.Payee)
-        .sort()
-    );
+  async resolve(root, args) {
+    const response = await Transaction.findAll({
+      where: { Category: "Food > Dining Out" }
+    });
+
+    const items = uniq(response.map(t => t.Payee).sort());
 
     return {
       count: items.length,
