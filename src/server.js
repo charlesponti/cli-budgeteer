@@ -27,7 +27,7 @@ app.use(
 if (require.main === module) {
   app.listen(3000, function() {
     logger.info(
-      `${process.env.NODE_ENV.toUpperCase()} GraphQL Server running @ port 3000`
+      `🚀 ${process.env.NODE_ENV.toUpperCase()} GraphQL Server running @ port 3000`
     );
   });
 }

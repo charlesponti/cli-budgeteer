@@ -1,9 +1,16 @@
 version: "3.1"
 
 services:
-  web:
-    build: .
-    depends_on:
-      - db
   db:
     image: postgres:latest
+    volumes:
+      - budgeteer-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: budgeteer
+    ports:
+      - "5432:5432"
+
+volumes:
+  budgeteer-data:

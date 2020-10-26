@@ -6,15 +6,16 @@ const logger = require("../logger");
 
 dotenv.config();
 
-const { Conn } = require("./index");
+const { sequelize } = require("./index");
 
-// logger.info("🚜 Beginning database sync...");
+logger.info("🚜 Beginning database sync...");
 
-Conn.sync({ force: true })
+sequelize
+  .sync()
   .then(() => {
     logger.info("✅ Completed database sync!");
     process.exit();
   })
   .catch(e => {
-    console.log(e);
+    logger.error(e);
   });
