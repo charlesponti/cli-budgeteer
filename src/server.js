@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const GraphQLHTTP = require("express-graphql");
 const app = express();
+const { PORT } = process.env;
 
 // Load environment variables
 dotenv.config();
@@ -25,7 +26,7 @@ app.use(
 );
 
 if (require.main === module) {
-  app.listen(3000, function() {
+  app.listen(PORT, function() {
     logger.info(
       `🚀 ${process.env.NODE_ENV.toUpperCase()} GraphQL Server running @ port 3000`
     );
