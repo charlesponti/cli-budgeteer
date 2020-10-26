@@ -1,7 +1,10 @@
 const express = require("express");
-
+const dotenv = require("dotenv");
 const GraphQLHTTP = require("express-graphql");
 const app = express();
+
+// Load environment variables
+dotenv.config();
 
 const { GraphQLSchema } = require("graphql");
 

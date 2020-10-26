@@ -1,4 +1,5 @@
 const winston = require("winston");
+const { LOG_DIR } = process.env;
 
 const logger = winston.createLogger({
   level: "info",
@@ -9,8 +10,11 @@ const logger = winston.createLogger({
     // - Write all logs with level `error` and below to `error.log`
     // - Write all logs with level `info` and below to `combined.log`
     //
-    new winston.transports.File({ filename: "error.log", level: "error" }),
-    new winston.transports.File({ filename: "combined.log" })
+    new winston.transports.File({
+      filename: `${LOG_DIR}/error.log`,
+      level: "error"
+    }),
+    new winston.transports.File({ filename: `${LOG_DIR}/combined.log` })
   ]
 });
 
