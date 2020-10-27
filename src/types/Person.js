@@ -5,8 +5,8 @@ const {
   GraphQLList
 } = require("graphql");
 const Account = require("./Account");
-const Transaction = require("./Transaction");
-
+const TransactionType = require("./Transaction");
+const { Transaction } = require("../data");
 const resolver = label => person => person[label];
 
 const PersonType = new GraphQLObjectType({
@@ -18,7 +18,10 @@ const PersonType = new GraphQLObjectType({
     lastName: { type: GraphQLString, resolve: resolver("lastName") },
     email: { type: GraphQLString, resolve: resolver("email") },
     accounts: { type: new GraphQLList(Account) },
-    transactions: { type: new GraphQLList(Transaction) }
+    transactions: {
+      type: new GraphQLList(TransactionType),
+      resolve: p => Transaction.findAll({ where: { person_id: p.id } })
+    }
   })
 });
 
