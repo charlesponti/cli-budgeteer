@@ -4,6 +4,7 @@ const {
   GraphQLFloat,
   GraphQLString
 } = require("graphql");
+const AccountType = require("./Account");
 const TransactionType = require("./Transaction");
 const PersonType = require("./Person");
 
@@ -29,6 +30,7 @@ const SummaryType = new GraphQLObjectType({
 });
 
 module.exports = {
+  AccountType,
   TransactionType,
   CategoryType,
   SummaryType,
