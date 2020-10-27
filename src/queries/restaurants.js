@@ -20,10 +20,10 @@ module.exports = {
   args: {},
   async resolve(root, args) {
     const response = await Transaction.findAll({
-      where: { Category: "Food > Dining Out" }
+      where: { category: "Food > Dining Out" }
     });
 
-    const items = uniq(response.map(t => t.Payee).sort());
+    const items = uniq(response.map(t => t.payee).sort());
 
     return {
       count: items.length,
