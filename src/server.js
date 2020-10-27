@@ -11,10 +11,13 @@ const { GraphQLSchema } = require("graphql");
 const logger = require("./logger");
 const mutation = require("./mutations");
 const query = require("./queries");
-const { PORT } = process.env;
+const { PORT, APP_URL } = process.env;
+
+var cors = require("cors");
 
 app.use(
   "*",
+  cors({ origin: APP_URL }),
   GraphQLHTTP({
     schema: new GraphQLSchema({
       query,
