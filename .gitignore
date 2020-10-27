@@ -1,2 +1,3 @@
 *.tgz
 logs*
+!.env.example
