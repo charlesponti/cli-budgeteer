@@ -11,7 +11,7 @@ const { sequelize } = require("./index");
 logger.info("🚜 Beginning database sync...");
 
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
     logger.info("✅ Completed database sync!");
     process.exit();
