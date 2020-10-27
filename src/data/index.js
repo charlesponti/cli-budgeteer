@@ -43,7 +43,7 @@ const Tag = sequelize.define("tag", {
   name: { type: STRING, allowNull: false }
 });
 
-const PersonModel = sequelize.define("person", {
+const Person = sequelize.define("person", {
   firstName: { type: STRING, allowNull: false },
   lastName: { type: STRING, allowNull: false },
   email: {
@@ -54,8 +54,8 @@ const PersonModel = sequelize.define("person", {
 });
 
 // Relationships
-PersonModel.hasMany(Account);
-PersonModel.hasMany(Transaction);
+Person.hasMany(Account, { foreignKey: "person_id" });
+Person.hasMany(Transaction, { foreignKey: "person_id" });
 
 Account.hasMany(Transaction, { foreignKey: "account_id" });
 Transaction.belongsTo(Account, { foreignKey: "account_id" });
@@ -65,9 +65,9 @@ Transaction.hasMany(Tag);
 
 module.exports = {
   sequelize,
-  // Person,
   Account,
   Transaction,
   Category,
+  Person,
   Tag
 };

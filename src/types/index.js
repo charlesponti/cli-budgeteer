@@ -5,6 +5,7 @@ const {
   GraphQLString
 } = require("graphql");
 const TransactionType = require("./Transaction");
+const PersonType = require('./Person')
 
 const CategoryType = new GraphQLObjectType({
   name: "Category",
@@ -31,4 +32,5 @@ module.exports = {
   TransactionType,
   CategoryType,
   SummaryType
+  PersonType
 };
