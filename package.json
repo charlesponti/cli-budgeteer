@@ -2,19 +2,24 @@
   "name": "@budgeteer/server",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/src/server.js",
   "dependencies": {
+    "@types/express-graphql": "^0.9.0",
+    "@types/graphql": "^14.5.0",
+    "@types/lodash": "^4.14.164",
+    "@types/node": "^14.14.6",
+    "@types/validator": "^13.1.0",
+    "apollo-server": "^2.19.0",
     "chai": "^4.2.0",
     "cors": "^2.8.5",
-    "csvtojson": "^2.0.8",
+    "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
-    "express": "^4.13.4",
-    "express-graphql": "^0.6.11",
-    "graphql": "^0.11.6",
-    "graphql-tools": "^2.0.0",
-    "lodash": "^4.17.19",
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.4.0",
+    "graphql-tools": "^7.0.1",
+    "lodash": "^4.17.20",
     "moment": "^2.29.1",
-    "nodemon": "^1.18.3",
     "pg": "^8.4.2",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.5",
@@ -23,31 +28,54 @@
   "scripts": {
     "docker:up": "docker-compose -f docker-compose.yml up --build",
     "docker:restart": "docker-compose down && yarn docker:up",
-    "db:sync": "node ./src/data/sync.js",
+    "db:sync": "node ./build/src/data/sync.js",
     "prestart": "npm run db:sync",
-    "start": "node ./src/server.js",
-    "start:dev": "$(npm bin)/nodemon ./src/server.js",
+    "start": "node ./build/src/server.js",
+    "start:dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "precommit": "pretty-quick --staged",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
     "test": "jest --passWithNoTests",
     "test:watch": "npm run test -- --watch",
-    "precommit": "pretty-quick --staged"
+    "posttest": "npm run lint"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^5.4.0",
-    "eslint-plugin-prettier": "^2.6.2",
-    "husky": "^0.14.3",
+    "concurrently": "^5.3.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "gts": "^3.0.2",
+    "husky": "^4.3.0",
     "jest": "^26.6.1",
+    "lint-staged": "^10.5.1",
     "mocha": "^8.2.0",
-    "prettier": "^1.14.2",
-    "pretty-quick": "^1.6.0",
-    "supertest": "^5.0.0"
+    "nodemon": "^2.0.6",
+    "prettier": "^2.1.2",
+    "pretty-quick": "^3.1.0",
+    "supertest": "^6.0.0",
+    "typescript": "^4.0.5"
   },
   "jest": {
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "npm run fix"
     ]
   }
 }
