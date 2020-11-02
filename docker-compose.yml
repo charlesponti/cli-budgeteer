@@ -4,13 +4,13 @@ services:
   db:
     image: postgres:latest
     volumes:
-      - budgeteer-data:/var/lib/postgresql/data
+      - hominem-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: budgeteer
+      POSTGRES_DB: hominem
     ports:
       - "5432:5432"
 
 volumes:
-  budgeteer-data:
+  hominem-data:
