@@ -1,13 +1,5 @@
-const {GraphQLList} = require('graphql');
-const {CategoryType} = require('../types');
-const data = require('../data');
+import {Category} from '../data';
 
-export default {
-  name: 'categories',
-  description: 'list of categories',
-  type: new GraphQLList(CategoryType),
-  args: {},
-  resolve() {
-    return data.getCategories();
-  },
-};
+export default function () {
+  return Category.findAll();
+}
