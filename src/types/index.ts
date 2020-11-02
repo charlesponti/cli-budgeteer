@@ -15,7 +15,7 @@ export default gql`
     payee: String
     description: String
     date: String
-    amound: Float
+    amount: Float
     category: ID!
     account_id: ID!
     account: Account
