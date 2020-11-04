@@ -6,9 +6,9 @@ import {isUndefined} from 'lodash';
 import moment = require('moment');
 
 import {Transaction} from '../data';
-import logger from '../logger';
 
 interface CreateTransactionRequest {
+  category_id: string;
   account_id: string;
   person_id: string;
   date: string;

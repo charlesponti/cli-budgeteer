@@ -23,24 +23,19 @@ export const Account = sequelize.define('account', {
 
 export const Category = sequelize.define('category', {
   name: {type: STRING, allowNull: false},
-  balance: {type: FLOAT, allowNull: false},
+  balance: {type: FLOAT, allowNull: false, defaultValue: 0},
 });
 
 export const Transaction = sequelize.define('transaction', {
   amount: {type: FLOAT, allowNull: false},
   date: {type: Sequelize.DATE, allowNull: false},
-  processed: {type: Sequelize.DATE, allowNull: true},
+  processed: {type: Sequelize.DATE},
   payee: {type: STRING, allowNull: false},
   description: {type: STRING},
-  category: {type: STRING},
   shared: {type: BOOLEAN},
   foreign_spend_amount: {type: STRING},
-  non_sterling_transaction_fee: {type: STRING},
+  transaction_fee: {type: STRING},
   exchange_rate: {type: STRING},
-});
-
-export const Tag = sequelize.define('tag', {
-  name: {type: STRING, allowNull: false},
 });
 
 export const Person = sequelize.define('person', {
@@ -54,11 +49,18 @@ export const Person = sequelize.define('person', {
 });
 
 // Relationships
-Person.hasMany(Account, {foreignKey: 'person_id'});
-Person.hasMany(Transaction, {foreignKey: 'person_id'});
 
+// Person -> Account
+Person.hasMany(Account, {foreignKey: 'person_id'});
+
+// Person <-> Transaction
+Person.hasMany(Transaction, {foreignKey: 'person_id'});
+Transaction.belongsTo(Person, {foreignKey: 'person_id'});
+
+// Account <-> Transaction
 Account.hasMany(Transaction, {foreignKey: 'account_id'});
 Transaction.belongsTo(Account, {foreignKey: 'account_id'});
 
-Transaction.hasMany(Category);
-Transaction.hasMany(Tag);
+// Category <-> Transaction
+Category.hasMany(Transaction, {foreignKey: 'category_id'});
+Transaction.belongsTo(Category, {foreignKey: 'category_id'});

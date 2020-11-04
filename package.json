@@ -2,7 +2,7 @@
   "name": "@hominem/api",
   "version": "0.1.0",
   "description": "",
-  "main": "build/src/server.js",
+  "main": "build/server.js",
   "dependencies": {
     "@types/express-graphql": "^0.9.0",
     "@types/graphql": "^14.5.0",
@@ -28,9 +28,9 @@
   "scripts": {
     "docker:up": "docker-compose -f docker-compose.yml up --build",
     "docker:restart": "docker-compose down && yarn docker:up",
-    "db:sync": "node ./build/src/data/sync.js",
+    "db:sync": "node ./build/data/sync.js",
     "prestart": "npm run db:sync",
-    "start": "node ./build/src/server.js",
+    "start": "node ./build/server.js",
     "start:dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
     "precommit": "pretty-quick --staged",
     "lint": "gts lint",

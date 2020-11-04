@@ -16,9 +16,16 @@ export default gql`
     description: String
     date: String
     amount: Float
-    category: ID!
+
+    # Category
+    category_id: ID!
+    category: Category
+
+    # Account
     account_id: ID!
     account: Account
+
+    # Person
     person_id: ID!
     person: Person
   }
@@ -35,7 +42,7 @@ export default gql`
     name: String
     total: Float
     count: Int
-    transations: [Transaction]
+    transactions: [Transaction]
   }
 
   type Account {
@@ -67,7 +74,10 @@ export default gql`
       amount: Float!
       person_id: ID!
       account_id: ID!
+      category_id: ID!
     ): Transaction
+
+    createCategory(name: String!, person_id: ID!): Category
 
     createAccount(name: String!, person_id: ID!): Account
 

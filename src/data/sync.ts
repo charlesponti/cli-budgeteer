@@ -8,14 +8,16 @@ dotenv.config();
 
 const {sequelize} = require('./index');
 
-logger.info('🚜 Beginning database sync...');
-
-sequelize
-  .sync({force: true})
-  .then(() => {
+async function syncDatabase() {
+  try {
+    logger.info('🚜 Beginning database sync...');
+    await sequelize.sync({force: true});
     logger.info('✅ Completed database sync!');
-    throw Error;
-  })
-  .catch((e: Error) => {
-    logger.error(e);
-  });
+    process.exit(0) // eslint-disable-line
+  } catch (e) {
+    logger.error(e.message);
+    process.exit(0) // eslint-disable-line
+  }
+}
+
+syncDatabase();
