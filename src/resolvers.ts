@@ -4,6 +4,10 @@ import Mutation from './mutations';
 import {Account, Category, Person, Transaction} from './data';
 
 export default {
+  Account: {
+    balance: async (account: any) =>
+      await Transaction.sum('amount', {where: {account_id: account.id}}),
+  },
   Category: {
     transactions: async (category: any) =>
       await Transaction.findAll({where: {category_id: category.id}}),
